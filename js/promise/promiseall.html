@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        let urls = [
+        'https://api.github.com/users/iliakan',
+        'https://api.github.com/users/remy',
+        'https://api.github.com/users/jeresig',
+        'https://api.github.com/users/jerdss'
+        ]
+
+        let requests = urls.map(url => fetch(url))
+
+        Promise.all(requests)
+        .then(responses => responses.forEach(
+           response => alert (`${response.url}: ${response.status}`)    
+        ))
+    </script>
+</head>
+<body>
+    
+</body>
+</html>

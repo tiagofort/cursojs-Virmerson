@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        //var url = './clientef.json'
+        var url = 'http://localhost:3000/'
+        fetch(url)
+            .then( (response) => 
+                 response.text()
+            )
+            .then((text) => {
+                let clientes = JSON.parse(text)
+                
+                clientes.forEach(element => {
+                    console.log(element)
+                    let img = document.createElement("img")
+                    img.src = element.foto
+                    img.title = element.nome
+                    document.body.appendChild(img)
+                });
+            })
+
+    </script>
+</body>
+
+</html>

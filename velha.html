@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="style.css" rel="stylesheet">
+    <script src="js/velhajs.js"></script>
+    <script>
+        var player = "O"
+        var cont = 0
+        var v = ""
+        function marcando(bt) {
+            v = document.getElementById(bt).innerText
+            let verif = new Jogovelha(player,
+                                      document.getElementById("bt1").innerText,
+                                      document.getElementById("bt2").innerText,
+                                      document.getElementById("bt3").innerText,
+                                      document.getElementById("bt4").innerText,
+                                      document.getElementById("bt5").innerText,
+                                      document.getElementById("bt6").innerText,
+                                      document.getElementById("bt7").innerText,
+                                      document.getElementById("bt8").innerText,
+                                      document.getElementById("bt9").innerText)
+            if (player == "O") {
+                if (v == "") {
+                    document.getElementById(bt).innerText = "O"
+                    player = "X"
+                    document.getElementById("lbplayer").innerText = "2"
+                    cont++
+                    if(cont>=3){
+                      verif.horizontal()
+                    }
+                } else {
+                    window.alert("ATENCAO! Selecione um posicao vazia para continuar")
+                }
+            } else if (player == "X") {
+                if (v == "") {
+                    document.getElementById(bt).innerText = "X"
+                    player = "O"
+                    document.getElementById("lbplayer").innerText = "1"
+                    cont++
+                    if(cont>=3){
+                      verif.horizontal()
+                    }
+                } else {
+                    window.alert("ATENCAO! Selecione um posicao vazia para continuar")
+                }
+            }
+        }
+    </script>
+    <title>Jogo da Velha</title>
+</head>
+
+<body>
+    <h1>Jogo da Velha</h1>
+    <button id="bt1" onclick="marcando(this.id)"></button> <button id="bt2" onclick="marcando(this.id)"></button>
+    <button id="bt3" onclick="marcando(this.id)"></button>
+    <p></p>
+    <button id="bt4" onclick="marcando(this.id)"></button> <button id="bt5" onclick="marcando(this.id)"></button>
+    <button id="bt6" onclick="marcando(this.id)"></button>
+    <p></p>
+    <button id="bt7" onclick="marcando(this.id)"></button> <button id="bt8" onclick="marcando(this.id)"></button>
+    <button id="bt9" onclick="marcando(this.id)"></button>
+    <p></p>
+    Player <label id="lbplayer">1</label>
+</body>
+
+</html>

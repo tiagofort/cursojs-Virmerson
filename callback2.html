@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+<script>
+    function buscarImg (f){
+        let arrImg = [
+        "https://media.giphy.com/media/14bhmZtBNhVnIk/giphy.gif",
+        "https://media.giphy.com/media/INceGYtyemmyY/giphy.gif",
+        "https://media.giphy.com/media/CWaNQJbsTyarK/giphy.gif"
+        ]
+       
+        f(arrImg[0])
+        f(arrImg[1])
+        f(arrImg[2])
+    }
+
+    function criarImg(url){
+        let imagem = document.createElement('img')
+        imagem.src = url
+        document.body.appendChild(imagem)
+    }
+
+    function alertaImg(url){
+      console.log("Imagem: " + url)
+    }
+
+</script>
+
+</head>
+<body>
+    <label id="nomes"></label>
+    <script>
+      buscarImg(criarImg)
+      buscarImg(alertaImg)
+      buscarImg(function (url){
+          window.alert(url)
+      })
+     buscarImg ((url)=> nomes.innerHTML = nomes.innerText + " " + url)
+
+    </script>
+</body>
+
+
+</html>

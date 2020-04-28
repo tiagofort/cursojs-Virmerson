@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="followersstile.css" rel="stylesheet">
+</head>
+
+<body>
+    <label>Github User:</label>
+    <input type="text" id="pesquisa">
+    <button id="btPesquisar" onclick="btPesq()">Pesquisar</button>
+
+    <table style="width:100%" border="1px" id="tbl">
+        <thead>
+            <tr>
+                <th>Login</th>
+                <th>Avatar</th>
+            </tr>
+        </thead>
+        <tbody id="tbody">
+            <tr>
+
+            </tr>
+        </tbody>
+    </table>
+
+
+</body>
+<script>
+    var urlsearch = ""
+    var table = document.getElementById("tbl")[0];
+    var tbody = document.getElementsByTagName("tbody")[0];
+
+    function btPesq() {
+        urlsearch = "https://api.github.com/users/" + document.getElementById("pesquisa").value.toLowerCase() + "/followers"
+        fetch(urlsearch)
+            .then( (response) => 
+                 response.json()
+            )
+            .then((json) => {
+                
+                json.forEach(element => {
+                    let img = document.createElement("img")
+                    let lbl = document.createElement("label")
+                    img.src = element.avatar_url
+                    lbl.value = element.login
+                    document.body.appendChild(lbl)
+                    document.body.appendChild(img)
+                                       
+                });
+            })
+
+    }
+
+
+
+
+</script>
+
+</html>

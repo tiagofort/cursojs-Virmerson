@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="estilo.css" rel="stylesheet">
+</head>
+
+<body>
+    <div>
+        <label>Nome</label>
+        <input type="text" id="nome"></input>
+        <p></p>
+        <label>Idade</label>
+        <input type="number" id="idade"></input>
+        <p></p>
+        <button id="btSalvar" onclick="add()">Salvar</button> <button id="btExcluir">Excluir</button>
+        <p></p>
+
+        <table style="width:100%" border="1px" id="tbl">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Nome</th>
+                    <th>Idade</th>
+                </tr>
+            </thead>
+            <tbody id="tbody">
+                <tr>
+
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+
+<script>
+
+    var idalterar = 0;
+
+    function add() {
+        let c = new Crud()
+        if (idalterar == 0) {
+            c.id = Date.now() + "" + Math.floor(Math.random() * 100)
+            c.nome = document.getElementById("nome").value
+            c.idade = document.getElementById("idade").value
+            limparCampos()
+            crud.adicionar(c)
+            eventoClick() // chamando evento de selecao de linha
+        } else {
+            c.id = idalterar
+            c.nome = document.getElementById("nome").value
+            c.idade = document.getElementById("idade").value
+            document.getElementById("btSalvar").innerHTML = "Salvar"
+            limparCampos()
+            idalterar = 0
+            crud.alterar(c)
+            eventoClick()
+        }
+    }
+
+    function del(id) {
+        crud.excluir(id)
+    }
+
+    class Crud {
+        constructor() {
+            this.arr = []
+        }
+
+        adicionar(obj) {
+            this.arr.push(obj)
+            this.adicionarTabela()
+        }
+        excluir(id) {
+            if (!this.checkIdExist(id)) {
+                throw "Nao encontrado"
+            }
+            let index = this.getIndexById(id)
+            this.arr.splice(index, 1)
+        }
+
+        alterar(obj) {
+            if (!this.checkIdExist(obj.id)) {
+                throw "Nao encontrado"
+            }
+            this.arr.forEach((o) => {
+                if (obj.id == o.id) {
+                    o.nome = obj.nome ? obj.nome : o.nome
+                    o.idade = obj.idade ? obj.idade : o.idade
+                    this.adicionarTabela()
+                }
+            })
+        }
+
+        buscar(obj) {
+            return this.arr.filter((o) => o.nome == obj.nome)
+        }
+
+        checkIdExist(id) {
+            return this.arr.some((obj) => obj.id == id)
+        }
+
+        getIndexById(id) {
+            for (let i = 0; i < this.arr.length; i++) {
+                if (this.arr[i].id == id) {
+                    return i
+                }
+            }
+        }
+
+
+        adicionarTabela() {
+            var table = document.getElementById("tbl")[0];
+            var tbody = document.getElementsByTagName("tbody")[0];
+
+            tbody.innerHTML = "";
+
+            for (var i = 0; i < this.arr.length; i++) {
+                tbody.innerHTML += "<tr><td>" + this.arr[i].id
+                    + "</td><td>" + this.arr[i].nome +
+                    "</td><td>" + this.arr[i].idade +
+                    "</td></tr>";
+            }
+        }
+
+    }
+
+    var crud = new Crud()
+    //variaveis manipulacao de tabela
+    var tabela = document.getElementById("tbl");
+    var linhas = tabela.getElementsByTagName("tr");
+
+    //adicionando evento de clique na tabela
+    function eventoClick() {
+        for (var i = 0; i < linhas.length; i++) {
+            var linha = linhas[i];
+            linha.addEventListener("click", function () {
+                //Adicionar ao atual
+                selLinha(this, false); //Selecione apenas um
+                //selLinha(this, true); //Selecione quantos quiser
+            });
+        }
+    }
+
+    /**
+    Caso passe true, você pode selecionar multiplas linhas.
+    Caso passe false, você só pode selecionar uma linha por vez.
+    **/
+    function selLinha(linha, multiplos) {
+        if (!multiplos) {
+            var linhas = linha.parentElement.getElementsByTagName("tr");
+            for (var i = 0; i < linhas.length; i++) {
+                var linha_ = linhas[i];
+                linha_.classList.remove("selecionado");
+            }
+        }
+
+        linha.classList.toggle("selecionado");
+
+        let selecionados = tabela.getElementsByClassName("selecionado");
+        for (var i = 0; i < selecionados.length; i++) {
+            var selecionado = selecionados[i];
+            selecionado = selecionado.getElementsByTagName("td");
+            document.getElementById("nome").value = selecionado[1].innerHTML
+            document.getElementById("idade").value = selecionado[2].innerHTML
+            idalterar = selecionado[0].innerHTML
+            document.getElementById("btSalvar").innerHTML = "Alterar"
+        }
+    }
+
+
+    /**
+Exemplo de como capturar os dados
+**/
+    var btnExcluir = document.getElementById("btExcluir");
+
+    btnExcluir.addEventListener("click", function () {
+        var selecionados = tabela.getElementsByClassName("selecionado");
+        //Verificar se está selecionado
+        if (selecionados.length < 1) {
+            alert("Selecione pelo menos uma linha");
+            return false;
+        }
+
+        var id = "";
+
+        for (var i = 0; i < selecionados.length; i++) {
+            var selecionado = selecionados[i];
+            selecionado = selecionado.getElementsByTagName("td");
+            id = selecionado[0].innerHTML;
+        }
+
+        del(id)
+        limparCampos()
+        document.getElementById("btSalvar").innerHTML = "Salvar"
+        idalterar = 0
+        crud.adicionarTabela()
+        eventoClick()
+    });
+
+    function limparCampos() {
+        document.getElementById("nome").value = ""
+        document.getElementById("idade").value = ""
+    }
+
+
+
+
+
+</script>
+
+</html>
